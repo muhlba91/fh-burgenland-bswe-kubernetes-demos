@@ -2,6 +2,7 @@
 
 [![Build status](https://img.shields.io/github/actions/workflow/status/muhlba91/fh-burgenland-bswe-kubernetes-demos/pipeline.yml?style=for-the-badge)](https://github.com/muhlba91/fh-burgenland-bswe-kubernetes-demos/actions/workflows/pipeline.yml)
 [![License](https://img.shields.io/github/license/muhlba91/fh-burgenland-bswe-kubernetes-demos?style=for-the-badge)](LICENSE.md)
+[![](https://api.scorecard.dev/projects/github.com/muhlba91/fh-burgenland-bswe-kubernetes-demos/badge?style=for-the-badge)](https://scorecard.dev/viewer/?uri=github.com/muhlba91/fh-burgenland-bswe-kubernetes-demos)
 
 This repository contains demo applications for the course "Softwaremanagement II" at the FH Burgenland (BSWE) for Kubernetes.
 
