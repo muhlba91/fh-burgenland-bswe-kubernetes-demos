@@ -49,9 +49,9 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  annotations: # TODO: ingress annotations
+    external-dns.alpha.kubernetes.io/provider: public
+    external-dns.alpha.kubernetes.io/target: 178.63.69.250,2a01:4f8:121:14e2:100:3:3:1
   hosts:
     - host: echo.demo.cluster.classroom.bswe.fh-burgenland.muehlbachler.xyz
       paths:

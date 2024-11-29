@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: wordpress
     app.kubernetes.io/component: wordpress
 spec:
-  storageClassName: openebs-hostpath
+  storageClassName: standard
   accessModes:
     - ReadWriteOnce
   resources:

@@ -55,7 +55,7 @@ spec:
     - metadata:
         name: mysql-data
       spec:
-        storageClassName: openebs-hostpath
+        storageClassName: standard
         accessModes:
           - ReadWriteOnce
         resources:

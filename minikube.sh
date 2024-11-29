@@ -8,6 +8,6 @@ minikube addons enable csi-hostpath-driver
 minikube addons enable metrics-server
 
 # a note about accessing apps in minikube: https://minikube.sigs.k8s.io/docs/handbook/accessing/
-# e.g. minikube tunnel
+# e.g. minikube tunnel / minikube service
 
 # minikube stop

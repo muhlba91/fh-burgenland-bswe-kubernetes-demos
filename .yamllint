@@ -2,6 +2,8 @@
 extends: default
 
 ignore:
+  - .github/
+  - .pre-commit-config.yaml
   - vclusters/
   - argocd/library/charts
   - exercise/helm/
@@ -9,3 +11,4 @@ ignore:
 rules:
   line-length:
     max: 100
+  comments: false
