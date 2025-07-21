@@ -19,32 +19,32 @@
         "pre-commit"
     ],
     "helm-values": {
-        "fileMatch": [
-            "(^|/)values\\.yaml$",
-            "(^|/)values-apps\\.yaml$"
+        "managerFilePatterns": [
+            "/(^|/)values\\.yaml$/",
+            "/(^|/)values-apps\\.yaml$/"
         ],
         "pinDigests": false
     },
     "helmv3": {
-        "fileMatch": [
-            "(^|/)Chart\\.yaml$"
+        "managerFilePatterns": [
+            "/(^|/)Chart\\.yaml$/"
         ]
     },
     "argocd": {
-        "fileMatch": [
-            "(^|/)argocd/.+\\.ya?ml$"
+        "managerFilePatterns": [
+            "/(^|/)argocd/.+\\.ya?ml$/"
         ]
     },
     "github-actions": {
-        "fileMatch": [
-            "^(workflow-templates|\\.github/workflows)/[^/]+\\.ya?ml$",
-            "(^|/)action\\.ya?ml$"
+        "managerFilePatterns": [
+            "/^(workflow-templates|\\.github/workflows)/[^/]+\\.ya?ml$/",
+            "/(^|/)action\\.ya?ml$/"
         ]
     },
     "pre-commit": {
         "enabled": true,
-        "fileMatch": [
-            "(^|/)\\.pre-commit-config\\.ya?ml$"
+        "managerFilePatterns": [
+            "/(^|/)\\.pre-commit-config\\.ya?ml$/"
         ]
     }
 }
