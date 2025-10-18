@@ -21,7 +21,7 @@ spec:
         app.kubernetes.io/component: wordpress
     spec:
       containers:
-        - image: wordpress:6.2.1-apache
+        - image: wordpress:6.8-apache
           name: wordpress
           env:
             - name: WORDPRESS_DB_PASSWORD

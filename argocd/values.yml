@@ -4,13 +4,6 @@ configs:
   params:
     server.insecure: true
 
-  repositories:
-    bitnami:
-      name: bitnami
-      url: registry-1.docker.io/bitnamicharts
-      enableOCI: "true"
-      type: helm
-
 server:
   service:
     type: NodePort

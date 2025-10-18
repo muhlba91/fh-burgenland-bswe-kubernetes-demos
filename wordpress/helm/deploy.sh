@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eou pipefail
 
-helm install -n wordpress-helm --create-namespace -f values.yml wordpress oci://registry-1.docker.io/bitnamicharts/wordpress
+HELM_KUBECONTEXT=minikube helm upgrade --install -n wordpress-helm --create-namespace -f values.yml wordpress oci://registry-1.docker.io/bitnamicharts/wordpress
 
-# to expose wordpress open in a new terminal: minikube tunnel
+# to expose wordpress open the chosen method in a new terminal:
+# - minikube tunnel
+# - minikube service -n wordpress-helm wordpress --url

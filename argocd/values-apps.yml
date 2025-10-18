@@ -1,7 +1,7 @@
 ---
 # see: https://github.com/argoproj/argo-helm/blob/main/charts/argocd-apps/values.yaml
 applications:
-  - name: wordpress
+  wordpress:
     namespace: argocd
     project: default
     finalizers:
@@ -10,9 +10,9 @@ applications:
       namespace: wordpress-argocd
       server: https://kubernetes.default.svc
     sources:
-      - chart: wordpress
-        repoURL: registry-1.docker.io/bitnamicharts
-        targetRevision: 23.1.12
+      - path: .
+        repoURL: oci://registry-1.docker.io/bitnamicharts/wordpress
+        targetRevision: 27.0.10
         helm:
           releaseName: wordpress
           valueFiles:
