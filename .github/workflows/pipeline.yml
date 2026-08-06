@@ -71,7 +71,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: bmuschko/setup-kubeconform@v1
+      - uses: bmuschko/setup-kubeconform@e5d264ec1eafe2314e750c429a9da7639dd5a003 # v1
 
       - run: |
           for dir in applications/*/manifests; do
@@ -99,7 +99,7 @@ jobs:
         with:
           version: latest
 
-      - uses: bmuschko/setup-kubeconform@v1
+      - uses: bmuschko/setup-kubeconform@e5d264ec1eafe2314e750c429a9da7639dd5a003 # v1
 
       - run: |
           mkdir -p rendered
