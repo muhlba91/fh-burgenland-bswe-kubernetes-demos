@@ -1,10 +1,17 @@
 #!/bin/bash
 set -eou pipefail
 
-HELM_KUBECONTEXT=minikube helm upgrade --install -n wordpress-helm --create-namespace -f values.yml wordpress oci://registry-1.docker.io/bitnamicharts/wordpress
+helm repo add gitea https://dl.gitea.com/charts/ || true
+helm repo update
 
-# to expose wordpress open the chosen method in a new terminal:
-# - minikube tunnel
-# - minikube service -n wordpress-helm wordpress --url
-# or use kubectl port-forward:
-# kubectl -n wordpress-helm port-forward service/wordpress 28015:443
+HELM_KUBECONTEXT=minikube helm upgrade --install \
+  -n gitea-helm \
+  --create-namespace \
+  -f values.yml \
+  gitea \
+  gitea/gitea
+
+# to expose gitea open the chosen method in a new terminal:
+# - minikube service -n gitea-helm gitea-http --url
+# - or use kubectl port-forward:
+#   kubectl -n gitea-helm port-forward service/gitea-http 3000:3000

@@ -41,6 +41,104 @@ jobs:
       - run: |
           yamllint .
 
+  helm:
+    runs-on: ubuntu-latest
+    name: Lint Helm Charts
+
+    steps:
+      - uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5
+        with:
+          version: latest
+
+      - run: |
+          for chart_dir in applications/*/helm; do
+            if [ -f "${chart_dir}/Chart.yaml" ]; then
+              helm dependency build "${chart_dir}"
+              helm lint "${chart_dir}"
+            fi
+          done
+          for chart in applications/*/helm/*; do
+            if [ -d "${chart}" ] && [ -f "${chart}/Chart.yaml" ]; then
+              helm dependency build "${chart}"
+              helm lint "${chart}"
+            fi
+          done
+
+  kubeconform:
+    runs-on: ubuntu-latest
+    name: Validate Kubernetes Manifests
+
+    steps:
+      - uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - uses: bmuschko/setup-kubeconform@v1
+
+      - run: |
+          for dir in applications/*/manifests; do
+            kubeconform \
+              -strict \
+              -ignore-missing-schemas \
+              -summary \
+              "${dir}"
+          done
+
+  helm-template:
+    runs-on: ubuntu-latest
+    name: Validate Helm Templates
+
+    steps:
+      - uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5
+        with:
+          version: latest
+
+      - uses: bmuschko/setup-kubeconform@v1
+
+      - run: |
+          mkdir -p rendered
+
+          for chart in applications/*/helm applications/*/helm/*; do
+            if [ -d "${chart}" ] && [ -f "${chart}/Chart.yaml" ]; then
+              helm dependency build "${chart}"
+
+              name=$(basename "$(dirname "${chart}")")
+              if [ "${name}" = "applications" ]; then
+                name=$(basename "${chart}")
+              fi
+
+              helm template "${name}" "${chart}" > "rendered/${name}.yaml"
+            fi
+          done
+
+      - name: Validate rendered Helm templates
+        run: |
+          kubeconform \
+            -strict \
+            -ignore-missing-schemas \
+            -summary \
+            rendered
+
   tflint:
     runs-on: ubuntu-latest
     name: Lint Terraform

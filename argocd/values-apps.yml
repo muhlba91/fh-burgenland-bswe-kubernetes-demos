@@ -1,32 +1,25 @@
 ---
 # see: https://github.com/argoproj/argo-helm/blob/main/charts/argocd-apps/values.yaml
 applications:
-  wordpress:
+  gitea:
     namespace: argocd
     project: default
     finalizers:
       - resources-finalizer.argocd.argoproj.io
     destination:
-      namespace: wordpress-argocd
+      namespace: gitea-argocd
       server: https://kubernetes.default.svc
     sources:
-      - path: .
-        repoURL: oci://registry-1.docker.io/bitnamicharts/wordpress
-        targetRevision: 27.0.10
+      - chart: gitea
+        repoURL: https://dl.gitea.com/charts/
+        targetRevision: 12.7.0
         helm:
-          releaseName: wordpress
+          releaseName: gitea
           valueFiles:
-            - $values/applications/wordpress/helm/values.yml
+            - $values/applications/gitea/helm/values.yml
       - ref: values
         repoURL: https://github.com/muhlba91/hochschule-burgenland-kubernetes-demos.git
         targetRevision: HEAD
-    ignoreDifferences:
-      - group: ""
-        kind: Secret
-        name: wordpress-mariadb
-        jsonPointers:
-          - /data/mariadb-password
-          - /data/mariadb-root-password
     syncPolicy:
       automated:
         prune: false

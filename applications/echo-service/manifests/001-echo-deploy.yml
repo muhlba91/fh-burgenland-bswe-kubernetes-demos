@@ -8,12 +8,11 @@ metadata:
     app.kubernetes.io/name: echo
     app.kubernetes.io/component: echo
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: echo
       app.kubernetes.io/component: echo
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
@@ -21,13 +20,13 @@ spec:
         app.kubernetes.io/component: echo
     spec:
       containers:
-        - image: hashicorp/http-echo:1.0.0
-          name: echo
+        - name: echo
+          image: hashicorp/http-echo:1.0.0
           args:
-            - -text="hello world"
+            - "-text=hello world"
           ports:
-            - containerPort: 5678
-              name: http
+            - name: http
+              containerPort: 5678
           resources:
             requests:
               cpu: 5m

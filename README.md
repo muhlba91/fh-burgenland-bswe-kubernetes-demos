@@ -18,30 +18,73 @@ To start a cluster, run one of the following bootstrap scripts:
 
 ### 2. Deployment Options
 
-#### Manual Deployment (Kubectl or Helm)
+Applications are available using different Kubernetes deployment approaches:
+
+- **Raw Kubernetes manifests**: Learn Kubernetes primitives directly using `kubectl apply`.
+- **Helm**: Package and deploy applications using Helm charts.
+- **GitOps with ArgoCD**: Manage application deployments declaratively using Git.
+
+### Manual Deployment (Kubectl or Helm)
 
 Each application includes `deploy.sh` and `destroy.sh` scripts in their respective `manifests` or `helm` directories.
 
-- **WordPress**: `applications/wordpress/`
-- **Echo Service**: `applications/echo-service/`
-- **GCS Reader**: `applications/gcs-reader/` (manifests only)
+Applications currently included:
 
-#### GitOps with ArgoCD
+- **Gitea** (`applications/gitea/`): Git hosting with a PostgreSQL database demonstrating Deployments, StatefulSets, Services, Secrets, and Persistent Volumes.
+- **Echo Service** (`applications/echo-service/`): A lightweight HTTP application demonstrating Deployments, Services, Ingress, Gateway API, HTTPRoute, and ListenerSet resources.
+- **GCS Reader** (`applications/gcs-reader/`): A simple application demonstrating access to Google Cloud Storage using Kubernetes manifests.
+
+### GitOps with ArgoCD
 
 To deploy using ArgoCD:
 
-1. Deploy ArgoCD: `./argocd/[minikube|k0s|default]/deploy.sh`
-2. Retrieve the admin password (printed at the end of the script).
-3. Access the dashboard via `minikube tunnel` or `minikube service` (for local clusters) or via the external IP (for GKE).
+1. Deploy ArgoCD:
 
-## Applications
+   ```bash
+   ./argocd/[minikube|default]/deploy.sh
+   ```
 
-- **[WordPress](applications/wordpress/)**: A WordPress instance with a MySQL database (StatefulSet).
-- **[Echo Service](applications/echo-service/)**: A simple echo application for testing deployments, HPA, and Ingress.
-- **[GCS Reader](applications/gcs-reader/)**: An application for reading from Google Cloud Storage.
+2. Retrieve the initial admin password (printed at the end of the deployment script).
+
+3. Access the ArgoCD UI:
+
+   - **Minikube**: `minikube tunnel` or `minikube service`
+   - **Other clusters**: Use the external IP or ingress of the ArgoCD server
+
+## Gateway API
+
+The Gateway API examples demonstrate a separation of responsibilities:
+
+- **Gateway**: Managed by the platform or cluster administrator.
+- **ListenerSet**: Defines application-specific listeners.
+- **HTTPRoute**: Defines application-specific routing rules.
+
+This separation allows infrastructure and application teams to work independently while using the Gateway API.
 
 ## Automation & CI
 
-- **Linting**: All YAML files are linted via [GitHub Actions](.github/workflows/pipeline.yml).
-- **Dependencies**: [Renovate](renovate.json) keeps container images and GitHub Actions up to date.
-- **Standards**: Uses `.pre-commit-config.yaml` and `.yamllint` for code quality.
+GitHub Actions automatically validates all changes on pull requests and pushes to the `main` branch.
+
+The pipeline includes the following checks:
+
+- **Commit Messages**: Pull requests are validated against the Conventional Commits specification using `conform`.
+- **YAML Linting**: All YAML files are checked with `yamllint`.
+- **Helm Validation**:
+  - Helm chart dependencies are resolved.
+  - Helm charts are validated using `helm lint`.
+  - Helm charts are rendered using `helm template`.
+- **Kubernetes Validation**:
+  - Raw Kubernetes manifests are validated using `kubeconform`.
+  - Rendered Helm manifests are also validated using `kubeconform`.
+- **Terraform Validation**: Infrastructure code is checked using `tflint`.
+
+## Dependency Management
+
+[Renovate](renovate.json) automatically keeps GitHub Actions, container images, and Helm chart dependencies up to date.
+
+## Code Quality
+
+The repository uses:
+
+- `.pre-commit-config.yaml` for local pre-commit hooks.
+- `.yamllint` for YAML style and formatting rules.

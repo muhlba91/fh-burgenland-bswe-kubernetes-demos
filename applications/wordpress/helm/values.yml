@@ -1,24 +1,29 @@
 ---
-# see: https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
-wordpressPassword: password
+# see: https://gitea.com/gitea/helm-chart
+gitea:
+  admin:
+    username: admin
+    password: password
+    email: admin@example.com
 
 service:
-  type: NodePort
+  http:
+    type: NodePort
 
 persistence:
+  enabled: true
   storageClass: standard
   size: 500Mi
-volumePermissions:
-  enabled: true
 
 resources:
   limits:
-    memory: 128Mi
+    memory: 256Mi
   requests:
     cpu: 10m
-    memory: 64Mi
+    memory: 128Mi
 
-mariadb:
+postgresql:
+  enabled: true
   primary:
     persistence:
       storageClass: standard

@@ -40,40 +40,59 @@ securityContext: {}
   # runAsUser: 1000
 
 args:
-  - -text="hello world"
+  - -text=hello world
 
 service:
   type: ClusterIP
-  port: 5678
+  port: 80
+  targetPort: 5678
 
-ingress:
-  enabled: false
-  className: ""
-  annotations: # TODO: ingress annotations
+listenerSet:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-issuer-muehlbachler-xyz
+  parentRef:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: kgateway-gateway
+    namespace: kgateway
+  listeners:
+    - name: https-echo
+      protocol: HTTPS
+      port: 443
+      hostname: echo.demo.cluster.classroom.hochschule-burgenland.muehlbachler.xyz
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: echo-tls
+      allowedRoutes:
+        namespaces:
+          from: Same
+
+httpRoute:
+  enabled: true
+  annotations:
     external-dns.alpha.kubernetes.io/provider: public
-    external-dns.alpha.kubernetes.io/target: 127.0.0.1
-  hosts:
-    # TODO: add host to route traffic to the echo service
-    - host: echo.demo.cluster.classroom.hochschule-burgenland.muehlbachler.xyz
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+    external-dns.alpha.kubernetes.io/target: 178.63.69.250,2a01:4f8:121:14e2:100:3:3:2
+  parentRef:
+    name: echo-listener
+    kind: ListenerSet
+    group: gateway.networking.k8s.io
+    sectionName: https-echo
+  hostnames:
+    - echo.demo.cluster.classroom.hochschule-burgenland.muehlbachler.xyz
+  matches:
+    - path:
+        type: PathPrefix
+        value: /
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  requests:
+    cpu: 5m
+    memory: 12Mi
+  limits:
+    cpu: 100m
+    memory: 32Mi
 
 autoscaling:
   enabled: false
