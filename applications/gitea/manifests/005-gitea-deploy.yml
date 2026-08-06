@@ -51,7 +51,7 @@ spec:
               memory: 1Gi
           volumeMounts:
             - name: gitea-data
-              mountPath: /data
+              mountPath: /var/lib/gitea
       volumes:
         - name: gitea-data
           persistentVolumeClaim:
