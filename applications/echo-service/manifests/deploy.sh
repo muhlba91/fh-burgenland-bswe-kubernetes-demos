@@ -6,3 +6,4 @@ kubectl apply -f 001-echo-deploy.yml
 kubectl apply -f 002-echo-svc.yml
 kubectl apply -f 003-echo-listenerset.yml
 kubectl apply -f 004-echo-httproute.yml
+kubectl apply -f 005-echo-ingress.yml
